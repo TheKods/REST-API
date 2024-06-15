@@ -1,0 +1,64 @@
+CREATE TABLE Supplier (
+    supplier_id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_supplier VARCHAR(255),
+    deskripsi_supplier TEXT,
+    alamat_supplier VARCHAR(255),
+    kontak_supplier VARCHAR(20)
+);
+
+CREATE TABLE UMKM (
+    umkm_id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_umkm VARCHAR(255),
+    deskripsi_umkm TEXT,
+    alamat_umkm VARCHAR(255),
+    kontak_umkm VARCHAR(20)
+);
+
+CREATE TABLE Auth (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    user_type ENUM('supplier', 'umkm') NOT NULL,
+    supplier_id INT,
+    umkm_id INT,
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id) ON DELETE CASCADE,
+    FOREIGN KEY (umkm_id) REFERENCES UMKM(umkm_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Barang_Mentah (
+    barang_mentah_id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_barang_mentah VARCHAR(255),
+    jenis_barang_mentah VARCHAR(255),
+    deskripsi_barang_mentah TEXT,
+    image LONGBLOB,
+    supplier_id INT,
+    price DECIMAL(10, 2),
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Produk_Batik (
+    produk_id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_produk VARCHAR(255),
+    deskripsi_produk TEXT,
+    harga_produk DECIMAL(10,2),
+    image LONGBLOB,
+    umkm_id INT,
+    supplier_id INT,
+    barang_mentah_id INT,
+    FOREIGN KEY (umkm_id) REFERENCES UMKM(umkm_id) ON DELETE CASCADE,
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id),
+    FOREIGN KEY (barang_mentah_id) REFERENCES Barang_Mentah(barang_mentah_id)
+);
+
+
+CREATE TABLE Profil_Pembatik (
+    pembatik_id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_pembatik VARCHAR(255),
+    image LONGBLOB,
+    tanggal_mulai DATE,
+    umkm_id INT,
+    FOREIGN KEY (umkm_id) REFERENCES UMKM(umkm_id) ON DELETE CASCADE
+);
+
+
+
